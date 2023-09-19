@@ -1,4 +1,5 @@
-﻿using Banking.Domain;
+﻿
+using Banking.Domain;
 
 namespace Banking.UnitTests.BankAccount;
 public class MakingDeposits
@@ -16,5 +17,18 @@ public class MakingDeposits
 
         // Then
         Assert.Equal(openingBalance + amountToDeposit, account.GetBalance());
+    }
+    [Fact]
+    public void CannotDepositInvalidValues()
+    {
+        var account = new Account();
+
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            account.Deposit(-1);
+
+        });
+
+
     }
 }
