@@ -26,4 +26,11 @@ public class StringCalculatorTests
         var result = calculator.Add("1,2");
         Assert.Equal(3, result);
     }
+
+    public void SingleNumberWithoutComma()
+    {
+        var calculator = new StringCalculator();
+        var result = calculator.Add("5");
+        Assert.Equal(5, result);
+    }
 }

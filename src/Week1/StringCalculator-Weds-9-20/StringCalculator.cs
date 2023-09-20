@@ -12,7 +12,17 @@ public class StringCalculator
         }
         else
         {
-            string[] numbersArray = numbers.Split(',');
+            string[] numbersArray;
+
+            if (numbers.Contains(","))
+            {
+                numbersArray = numbers.Split(',');
+            }
+            else
+            {
+                numbersArray = new string[] { numbers };
+            }
+
             int sum = 0;
             foreach (string num in numbersArray)
             {
