@@ -1,29 +1,97 @@
-using Xunit;
+﻿
+namespace StringCalculator;
 
-namespace StringCalculator
+public class StringCalculatorTests
 {
-    public class StringCalculatorTests
+    [Fact]
+    public void EmptyStringReturnsZero()
     {
-        [Theory]
-        [InlineData("", 0)] // Empty string returns zero
-        [InlineData("1", 1)] // Single number returns itself
-        [InlineData("1,2", 3)] // Two numbers separated by a comma
-        [InlineData("5", 5)] // Single number without a comma
-        [InlineData("1\n2,3", 6)] // New lines between numbers
-        [InlineData("//;\n1;2;3", 6)] // Custom delimiter using ';'
-        [InlineData("//$\n4$5$6", 15)] // Custom delimiter using '$'
-        [InlineData("//*\n7*8*9", 24)] // Custom delimiter using '*'
-        [InlineData("//|\n4|5|6", 15)] // Custom delimiter using '|'
-        [InlineData("//@\n7@8@9", 24)] // Custom delimiter using '@'
-        [InlineData("//%\n10%11%12", 33)] // Custom delimiter using '%'
-        [InlineData("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15", 120)] // 15 numbers separated by commas
-        [InlineData("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15", 120)] // 15 numbers separated by new lines
-        [InlineData("//;\n1;2;3;4;5;6;7;8;9;10;11;12;13;14;15", 120)] // 15 numbers separated by custom delimiter ';'
-        public void AddHandlesDifferentInputs(string input, int expected)
+        var calculator = new StringCalculator();
+
+        var result = calculator.Add("");
+
+        Assert.Equal(0, result);
+    }
+    [Theory]
+    [InlineData("1", 1)]
+    [InlineData("12", 12)]
+    [InlineData("108", 108)]
+    public void SingleDigits(string numbers, int expected)
+    {
+        var calculator = new StringCalculator();
+
+        var result = calculator.Add(numbers);
+
+        Assert.Equal(expected, result);
+    }
+    [Theory]
+    [InlineData("1,2", 3)]
+    [InlineData("108,2", 110)]
+    [InlineData("10,50", 60)]
+    public void TwoDigits(string numbers, int expected)
+    {
+        var calculator = new StringCalculator();
+
+        var result = calculator.Add(numbers);
+
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("1,2,3", 6)]
+    [InlineData("1,2,3,4,5,6,7,8,9", 45)]
+    [InlineData("108,2,20", 130)]
+    public void ArbitraryNumbers(string numbers, int expected)
+    {
+        var calculator = new StringCalculator();
+
+        var result = calculator.Add(numbers);
+
+        Assert.Equal(expected, result);
+    }
+    [Theory]
+    [InlineData("1,2\n3", 6)]
+    [InlineData("1\n2", 3)]
+    public void MixedDelimeters(string numbers, int expected)
+    {
+        var calculator = new StringCalculator();
+
+        var result = calculator.Add(numbers);
+
+        Assert.Equal(expected, result);
+    }
+    [Theory]
+    [InlineData("//;\n1;2", 3)]
+    [InlineData("//;\n3;3", 6)]
+    [InlineData("//;\n1,2,3;4", 10)]
+
+    public void CustomDelimeters(string numbers, int expected)
+    {
+        var calculator = new StringCalculator();
+
+        var result = calculator.Add(numbers);
+
+        Assert.Equal(expected, result);
+    }
+    [Theory]
+    [InlineData("-1")]
+    [InlineData("1,-1")]
+    public void NegativeNumbersThrows(string numbers)
+    {
+        var calculator = new StringCalculator();
+
+        Assert.Throws<NoNegativeNumbersException>(() =>
         {
-            var calculator = new StringCalculator();
-            var result = calculator.Add(input);
-            Assert.Equal(expected, result);
-        }
+            calculator.Add(numbers);
+        });
+    }
+
+    [Fact(Skip = "Do this later")]
+    public void WhatIfTHeyPassInANonNumber()
+    {
+        var calculator = new StringCalculator();
+
+        calculator.Add("1,DOG");
+
     }
 }
