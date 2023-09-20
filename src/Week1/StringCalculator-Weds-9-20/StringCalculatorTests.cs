@@ -27,10 +27,19 @@ public class StringCalculatorTests
         Assert.Equal(3, result);
     }
 
+    [Fact]
     public void SingleNumberWithoutComma()
     {
         var calculator = new StringCalculator();
         var result = calculator.Add("5");
         Assert.Equal(5, result);
+    }
+
+    [Fact]
+    public void NewLinesSeperator()
+    {
+        var calculator = new StringCalculator();
+        var result = calculator.Add("1\n2, 3");
+        Assert.Equal(6, result);
     }
 }

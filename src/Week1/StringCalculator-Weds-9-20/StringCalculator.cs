@@ -12,16 +12,8 @@ public class StringCalculator
         }
         else
         {
-            string[] numbersArray;
-
-            if (numbers.Contains(","))
-            {
-                numbersArray = numbers.Split(',');
-            }
-            else
-            {
-                numbersArray = new string[] { numbers };
-            }
+            string[] seperators = new string[] { ",", "\n" };
+            string[] numbersArray = numbers.Split(seperators, StringSplitOptions.RemoveEmptyEntries);
 
             int sum = 0;
             foreach (string num in numbersArray)
