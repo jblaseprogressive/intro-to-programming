@@ -6,7 +6,7 @@ public class MakingWithdraws
     [Theory]
     [InlineData(82.23)]
     [InlineData(200)]
-    public void MakingAWithdrawalDecreasesTheBalance(decimal amountToWithdraw)
+    public void MakingAWithdrawalDecreasesTheBalance(decimal amountToWraithdraw)
 
     {
         // Given
@@ -14,11 +14,11 @@ public class MakingWithdraws
         var openingBalance = account.GetBalance();
 
         // When
-        account.Withdraw(amountToWithdraw);
+        account.Withdraw(amountToWraithdraw);
 
 
         //then
-        Assert.Equal(openingBalance - amountToWithdraw, account.GetBalance());
+        Assert.Equal(openingBalance - amountToWraithdraw, account.GetBalance());
     }
 
 

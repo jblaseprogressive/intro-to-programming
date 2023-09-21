@@ -1,5 +1,6 @@
 ﻿
 using Banking.Domain;
+using Banking.UnitTests.TestDoubles;
 
 namespace Banking.UnitTests.BankAccount;
 public class MakingDeposits
@@ -8,27 +9,17 @@ public class MakingDeposits
     public void MakingADepositIncreasesTheBalance()
     {
         // Given
-        var account = new Account();
+        var account = new Account(new DummyStandardBonusCalculator());
         var openingBalance = account.GetBalance();
         var amountToDeposit = 125.23M;
+        var deposit = TransactionValueTypes.Deposit.CreateFrom(amountToDeposit);
 
         // When
-        account.Deposit(amountToDeposit);
+        account.Deposit(deposit);
 
         // Then
+
         Assert.Equal(openingBalance + amountToDeposit, account.GetBalance());
     }
-    [Fact]
-    public void CannotDepositInvalidValues()
-    {
-        var account = new Account();
 
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
-        {
-            account.Deposit(-1);
-
-        });
-
-
-    }
 }
