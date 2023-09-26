@@ -1,4 +1,5 @@
-import { Injectable, signal } from "@angular/core";
+import { Injectable, computed, signal } from "@angular/core";
+import { TodoSummary } from "../components/todo-summary.component";
 
 @Injectable({
     providedIn: 'root'
@@ -6,13 +7,13 @@ import { Injectable, signal } from "@angular/core";
 export class TodosDataService {
 
 
-    private items: TodoItem[] = [
+    private items = signal<TodoItem[]>([
         { id: '1', description: 'Beer', completed: false },
         { id: '2', description: 'Shampoo', completed: true }
-    ]
+    ]);
 
     getItems() {
-        return signal(this.items).asReadonly()
+        return signal(this.items);
     }
     addItem(description: string) {
         const itemToAdd: TodoItem = {
@@ -20,14 +21,26 @@ export class TodosDataService {
             description,
             completed: false
         };
-        this.items.push(itemToAdd);
+        this.items.mutate((items) => items.push(itemToAdd));
     }
 
     markItemComplete(item: TodoItem) {
-        const savedItem = this.items.find(i => i.id === item.id);
-        if (savedItem) {
-            savedItem.completed = true
-        }
+
+        this.items.mutate(items => {
+            const savedItem = items.find(i => i.id === item.id);
+            if (savedItem) {
+                savedItem.completed = true
+            }
+        });
+
+    }
+
+    getSummary() {
+        return computed(() => ({
+            total: this.items().length,
+            complete: this.items().filter(t => t.completed === true).length,
+            incomplete: this.items().filter(t => t.completed === false).length
+        }) as TodoSummary)
     }
 }
 
